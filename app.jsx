@@ -37,7 +37,7 @@ class Clock extends React.Component {
         this.timer = window.setInterval(this.tick.bind(this), 1000)
     }
 
-    componentWillDidUnmount () {
+    componentWillUnmount () {
         window.clearInterval(this.timer)
     }
 
