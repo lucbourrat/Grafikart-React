@@ -70,7 +70,7 @@ class Incrementer extends React.Component {
         window.setInterval(this.increment.bind(this), 1000)
     }
 
-    componentWillDidUnmount () {
+    componentWillUnmount () {
         window.clearInterval(this.timer)
     }
 
