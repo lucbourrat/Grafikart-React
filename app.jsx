@@ -55,6 +55,11 @@ class Clock extends React.Component {
 
 class Incrementer extends React.Component {
 
+    static defaultProps = {
+        start: 0,
+        step: 1
+    }
+    
     constructor (props) {
         super(props)
         this.state = {n: props.start}
@@ -71,6 +76,7 @@ class Incrementer extends React.Component {
 
     increment () {
         // this.setState({n: this.state.n + 1})
+        // this.setState({n: this.state.n + this.props.step})
         this.setState(function (state, props) {
             return {n: state.n + props.step}
         })
@@ -81,16 +87,17 @@ class Incrementer extends React.Component {
     }
 }
 
-Incrementer.defaultProps = {
-    start: 0,
-    step: 1,
-}
+// Incrementer.defaultProps = {
+//     start: 0,
+//     step: 1
+// }
 
 function Home() {
     return <div>
         <Welcome name="Dorothée" />
         <Welcome name="Jean" />
         <Clock/>
+        <Incrementer/>
         <Incrementer start={10}/>
         <Incrementer start={100} step={10}/>
     </div>
