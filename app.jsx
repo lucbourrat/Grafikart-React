@@ -74,8 +74,6 @@ class Incrementer extends React.Component {
     }
 
     increment () {
-        // this.setState({n: this.state.n + 1})
-        // this.setState({n: this.state.n + this.props.step})
         this.setState(function (state, props) {
             return {n: state.n + props.step}
         })
@@ -86,19 +84,109 @@ class Incrementer extends React.Component {
     }
 }
 
-// Incrementer.defaultProps = {
-//     start: 0,
-//     step: 1
-// }
+class MunualIncrementer extends React.Component {
+    
+    constructor (props) {
+        super(props)
+        this.state = {n: 0}
+    }
+
+    increment (e) {
+        console.log(e)
+        // e n'est pas un "mouse click" comme avec JS, mais un SyntheticEvent (voir doc React)
+        e.preventDefault()
+        this.setState(function (state, props) {
+            return {n: this.state.n + 1}
+        })
+    }
+
+    render () {
+        return <div>
+            Valeur : {this.state.n} 
+            <button onClick={this.increment.bind(this)}>Incrémenter</button>
+        </div>
+    }
+}
+
+class IncrementerPauseButton extends React.Component {
+
+    static defaultProps = {
+        start: 0,
+        step: 1
+    }
+    
+    constructor (props) {
+        super(props)
+        this.state = {n: props.start, timer: null}
+    }
+
+    componentDidMount () {
+        this.play()
+    }
+
+    componentWillUnmount () {
+        window.clearInterval(this.state.timer)
+    }
+
+    increment () {
+        this.setState(function (state, props) {
+            return {n: state.n + props.step}
+        })
+    }
+
+    pause () {
+        window.clearInterval(this.state.timer)
+        this.setState({
+            timer: null
+        })
+    }
+
+    play () {
+        window.clearInterval(this.state.timer)
+        this.setState({
+            timer: window.setInterval(this.increment.bind(this), 1000)
+        })
+    }
+
+    toggle () {
+        return this.state.timer ? 
+            this.pause() :
+            this.play()
+    }
+
+    label () {
+        return this.state.timer ? 
+            "Pause" :
+            "Lecture"
+    }
+
+    reset () {
+        this.pause()
+        this.play()
+        this.setState(function (state, props) {
+            return {n: props.start}
+        })
+    }
+
+    render () {
+        return <div>
+            Valeur : {this.state.n} 
+            <button onClick={this.toggle.bind(this)}>{this.label()}</button>
+            <button onClick={this.reset.bind(this)}>Réinitialiser</button>
+        </div>
+    }
+}
 
 function Home() {
     return <div>
         <Welcome name="Dorothée" />
         <Welcome name="Jean" />
-        <Clock/>
-        <Incrementer/>
+        <Clock />
+        <Incrementer />
         <Incrementer start={10}/>
         <Incrementer start={100} step={10}/>
+        <MunualIncrementer />
+        <IncrementerPauseButton />
     </div>
 }
 
